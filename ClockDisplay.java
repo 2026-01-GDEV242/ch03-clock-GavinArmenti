@@ -17,6 +17,7 @@ public class ClockDisplay
     private NumberDisplay hours;
     private NumberDisplay minutes;
     private String displayString;    // simulates the actual display
+    private boolean AM = true;   // True if time is in AM, false if PM
     
     /**
      * Constructor for ClockDisplay objects. This constructor 
@@ -24,7 +25,7 @@ public class ClockDisplay
      */
     public ClockDisplay()
     {
-        hours = new NumberDisplay(24);
+        hours = new NumberDisplay(12);
         minutes = new NumberDisplay(60);
         updateDisplay();
     }
@@ -36,7 +37,7 @@ public class ClockDisplay
      */
     public ClockDisplay(int hour, int minute)
     {
-        hours = new NumberDisplay(24);
+        hours = new NumberDisplay(12);
         minutes = new NumberDisplay(60);
         setTime(hour, minute);
     }
@@ -50,6 +51,10 @@ public class ClockDisplay
         minutes.increment();
         if(minutes.getValue() == 0) {  // it just rolled over!
             hours.increment();
+            if (hours.getValue() == 0)
+            {
+                AM = !AM;
+            }
         }
         updateDisplay();
     }
@@ -78,7 +83,23 @@ public class ClockDisplay
      */
     private void updateDisplay()
     {
-        displayString = hours.getDisplayValue() + ":" + 
-                        minutes.getDisplayValue();
+        String displayHour = hours.getDisplayValue();
+        String displayMeridian = "";
+        
+        if (hours.getValue() == 0)
+        {
+            displayHour = "12";
+        }
+        
+        if (AM)
+        {
+            displayMeridian = "AM";
+        }
+        else
+        {
+            displayMeridian = "PM";
+        }
+        displayString = displayHour + ":" + 
+                        minutes.getDisplayValue()+displayMeridian;
     }
 }
